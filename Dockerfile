@@ -5,6 +5,10 @@ RUN chmod 777 /usr/src/app
 
 RUN apt -qq update && \
     apt-get install fontconfig -y -f
+RUN apt-get update && \
+    apt-get install -y ffmpeg && \
+    rm -rf /var/lib/apt/lists/*
+
 
 COPY . .
 
