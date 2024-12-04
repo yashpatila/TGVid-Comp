@@ -52,7 +52,7 @@ async def Cb_Handle(bot: Client, query: CallbackQuery):
         except Exception as e:
             print(e)
 
-    elif data == 'option':  # Automatically trigger compression at 720p
+    elif data == 'compress':  # Automatically trigger compression at 720p
         user_id = query.from_user.id
         file = getattr(query.message.reply_to_message, query.message.reply_to_message.media.value)
         c_thumb = await db.get_thumbnail(user_id)
