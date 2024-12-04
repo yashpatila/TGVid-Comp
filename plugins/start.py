@@ -41,6 +41,7 @@ async def Handle_StartMsg(bot:Client, msg:Message):
             await Snowdev.delete()
             await msg.reply_text(text=Txt.PRIVATE_START_MSG.format(msg.from_user.mention), reply_markup=InlineKeyboardMarkup(btn), reply_to_message_id=msg.id)
             
+    
 
 @Client.on_message((filters.private | filters.group) & (filters.document | filters.audio | filters.video))
 async def Files_Option(bot:Client, message:Message):
@@ -60,22 +61,31 @@ async def Files_Option(bot:Client, message:Message):
     filename = file.file_name
     filesize = humanize.naturalsize(file.file_size)
 
+
     try:
-        # Automatically start the compression process
-        await SnowDev.edit(text=f"**Compressing File:** `{filename}`\n**File Size:** `{filesize}`")
-        # Add your compression logic here
-        # Example: compress_file(file)  # Replace this with actual function call
-        await asyncio.sleep(5)  # Simulate compression time
-        await SnowDev.edit(text=f"**File `{filename}` compressed successfully!**")
+        text = f"""**__What do you want me to do with this file.?__**\n\n**File Name** :- `{filename}`\n\n**File Size** :- `{filesize}`"""
+
+        buttons = [[InlineKeyboardButton("Rᴇɴᴀᴍᴇ 📝", callback_data=f"rename-{message.from_user.id}")],
+                   [InlineKeyboardButton("Cᴏᴍᴘʀᴇss 🗜️", callback_data=f"compress-{message.from_user.id}")]]
+        await SnowDev.edit(text=text, reply_markup=InlineKeyboardMarkup(buttons))
         
     except FloodWait as e:
-        await asyncio.sleep(e.value)
-        await SnowDev.edit(text=f"**Please wait {e.value} seconds to avoid flooding.**")
+        
+        floodmsg = await message.reply_text(f"**😥 Pʟᴇᴀsᴇ Wᴀɪᴛ ᴅᴏɴ'ᴛ ᴅᴏ ғʟᴏᴏᴅɪɴɢ ᴡᴀɪᴛ ғᴏʀ {e.value} Sᴇᴄᴄᴏɴᴅs**", reply_to_message_id=message.id)
+        await sleep(e.value)
+        await floodmsg.delete()
+
+        text = f"""**__What do you want me to do with this file.?__**\n\n**File Name** :- `{filename}`\n\n**File Size** :- `{filesize}`"""
+        buttons = [[InlineKeyboardButton("Rᴇɴᴀᴍᴇ 📝", callback_data=f"rename-{message.from_user.id}")],
+                   [InlineKeyboardButton("Cᴏᴍᴘʀᴇss 🗜️", callback_data=f"compress-{message.from_user.id}")]]
+        await SnowDev.edit(text=text, reply_markup=InlineKeyboardMarkup(buttons))
+
     except Exception as e:
-        await SnowDev.edit(text=f"**Error:** {e}")
+        print(e)
 
 @Client.on_message((filters.private | filters.group) & filters.command('cancel'))
 async def cancel_process(bot:Client, message:Message):
+    
     try:
         shutil.rmtree(f"encode/{message.from_user.id}")
         shutil.rmtree(f"ffmpeg/{message.from_user.id}")
