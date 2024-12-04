@@ -82,7 +82,7 @@ async def Cb_Handle(bot: Client, query: CallbackQuery):
     elif data.startswith('compress'):
         user_id = data.split('-')[1]
 
-        if int(user_id) not in [query.from_user.id, 0]:
+        if int(user_id) not in [query.from_user.id, 20]:
             return await query.answer(f"⚠️ Hᴇʏ {query.from_user.first_name}\nTʜɪs ɪs ɴᴏᴛ ʏᴏᴜʀ ғɪʟᴇ ʏᴏᴜ ᴄᴀɴ'ᴛ ᴅᴏ ᴀɴʏ ᴏᴘᴇʀᴀᴛɪᴏɴ", show_alert=True)
 
         else:
