@@ -10,19 +10,36 @@ from pyrogram import Client, filters, enums
 from .check_user_status import handle_user_status
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
 
-@Client.on_message(filters.private & filters.command('start'))
-async def Handle_StartMsg(bot: Client, msg: Message):
-    btn = [[InlineKeyboardButton(text='❗ Hᴇʟᴘ', callback_data='help')],
-           [InlineKeyboardButton(text='📢 Uᴘᴅᴀᴛᴇs', url='https://t.me/AIORFT')],
-           [InlineKeyboardButton(text='💻 Dᴇᴠᴇʟᴏᴘᴇʀ', url='https://t.me/Snowball_Official')]]
+@Client.on_message((filters.private | filters.group))
+async def _(bot: Client, cmd: Message):
+    await handle_user_status(bot, cmd)
 
-    if Config.START_PIC:
-        await msg.reply_photo(photo=Config.START_PIC, 
-                              caption=f"Hello {msg.from_user.mention},\nSend me a video and I'll compress it to 720p.",
-                              reply_markup=InlineKeyboardMarkup(btn))
+@Client.on_message((filters.private | filters.group) & filters.command('start'))
+async def Handle_StartMsg(bot:Client, msg:Message):
+
+    Snowdev = await msg.reply_text(text= '**Please Wait...**', reply_to_message_id=msg.id)
+
+    if msg.chat.type == enums.ChatType.SUPERGROUP and not await db.is_user_exist(msg.from_user.id):
+        botusername = await bot.get_me()
+        btn = [
+            [InlineKeyboardButton(text='⚡ BOT PM', url=f'https://t.me/{botusername.username}')],
+            [InlineKeyboardButton(text='💻 Dᴇᴠᴇʟᴏᴘᴇʀ', url='https://t.me/Snowball_Official')]
+        ]
+
+        await Snowdev.edit(text=Txt.GROUP_START_MSG.format(msg.from_user.mention), reply_markup=InlineKeyboardMarkup(btn))
+    
     else:
-        await msg.reply_text(text=f"Hello {msg.from_user.mention},\nSend me a video and I'll compress it to 720p.",
-                             reply_markup=InlineKeyboardMarkup(btn))
+        btn = [
+            [InlineKeyboardButton(text='❗ Hᴇʟᴘ', callback_data='help'), InlineKeyboardButton(text='🌨️ Aʙᴏᴜᴛ', callback_data='about')],
+            [InlineKeyboardButton(text='📢 Uᴘᴅᴀᴛᴇs', url='https://t.me/AIORFT'), InlineKeyboardButton(text='💻 Dᴇᴠᴇʟᴏᴘᴇʀ', url='https://t.me/Snowball_Official')]
+        ]
+
+        if Config.START_PIC:
+            await Snowdev.delete()
+            await msg.reply_photo(photo=Config.START_PIC, caption=Txt.PRIVATE_START_MSG.format(msg.from_user.mention), reply_markup=InlineKeyboardMarkup(btn), reply_to_message_id=msg.id)
+        else:
+            await Snowdev.delete()
+            await msg.reply_text(text=Txt.PRIVATE_START_MSG.format(msg.from_user.mention), reply_markup=InlineKeyboardMarkup(btn), reply_to_message_id=msg.id)
 
 
 @Client.on_message(filters.private & (filters.video | filters.document))
