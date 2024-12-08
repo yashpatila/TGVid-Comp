@@ -66,8 +66,8 @@ async def Files_Option(bot:Client, message:Message):
         text = f"""**__What do you want me to do with this file.?__**\n\n**File Name** :- `{filename}`\n\n**File Size** :- `{filesize}`"""
 
         # Directly select compress option
-        buttons = [[InlineKeyboardButton("Cᴏᴍᴘʀᴇss 🗜️", callback_data=f"compress-{message.from_user.id}")]]
-        await SnowDev.edit(text=text, reply_markup=InlineKeyboardMarkup(buttons))
+        
+        await SnowDev.edit(text=text, reply_markup=compress-{message.from_user.id})
 
         
     except FloodWait as e:
@@ -79,8 +79,8 @@ async def Files_Option(bot:Client, message:Message):
         text = f"""**__What do you want me to do with this file.?__**\n\n**File Name** :- `{filename}`\n\n**File Size** :- `{filesize}`"""
 
         # Directly select compress option
-        buttons = [[InlineKeyboardButton("Cᴏᴍᴘʀᴇss 🗜️", callback_data=f"compress-{message.from_user.id}")]]
-        await SnowDev.edit(text=text, reply_markup=InlineKeyboardMarkup(buttons))
+        
+        await SnowDev.edit(text=text, reply_markup=compress-{message.from_user.id})
 
     except Exception as e:
         print(e)
