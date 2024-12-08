@@ -63,11 +63,21 @@ async def Files_Option(bot:Client, message:Message):
 
 
     try:
-        text = f"""**__What do you want me to do with this file.?__**\n\n**File Name** :- `{filename}`\n\n**File Size** :- `{filesize}`"""
+    # Generate a text message for logging or informing the user
+       
+        text = f"""**__Processing your file automatically...__**\n\n**File Name** :- `{filename}`\n\n**File Size** :- `{filesize}`"""
 
-        buttons = [[InlineKeyboardButton("Rᴇɴᴀᴍᴇ 📝", callback_data=f"rename-{message.from_user.id}")],
-                   [InlineKeyboardButton("Cᴏᴍᴘʀᴇss 🗜️", callback_data=f"compress-{message.from_user.id}")]]
-        await SnowDev.edit(text=text, reply_markup=InlineKeyboardMarkup(buttons))
+    # Update the bot's message to notify the user
+         
+        await SnowDev.edit(text=text)
+
+    # Simulate automatic selection of "Compress" callback
+        
+        callback_data = f"compress-{message.from_user.id}"
+    
+    # Call the compression logic directly
+        
+        await handle_compression(callback_data, message, filename)
         
     except FloodWait as e:
         
