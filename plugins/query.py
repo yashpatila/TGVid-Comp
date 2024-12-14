@@ -62,19 +62,11 @@ async def Cb_Handle(bot: Client, query: CallbackQuery):
         file = getattr(query.message.reply_to_message,
                        query.message.reply_to_message.media.value)
 
-        text = f"""**__Processing your file automatically...__**\n\n**File Name** :- `{filename}`\n\n**File Size** :- `{filesize}`"""
+        text = f"""**__What do you want me to do with this file.?__**\n\n**File Name** :- `{file.file_name}`\n\n**File Size** :- `{humanize.naturalsize(file.file_size)}`"""
+        buttons = [[InlineKeyboardButton("Rᴇɴᴀᴍᴇ 📝", callback_data=f"rename-{query.from_user.id}")],
+                   [InlineKeyboardButton("Cᴏᴍᴘʀᴇss 🗜️", callback_data=f"compress-{query.from_user.id}")]]
 
-    # Update the bot's message to notify the user
-         
-        await SnowDev.edit(text=text)
-
-    # Simulate automatic selection of "Compress" callback
-        
-        callback_data = f"compress-{query.from_user.id}"
-    
-    # Call the compression logic directly
-        
-        await handle_compression(callback_data, query, filename)
+        await query.message.edit(text=text, reply_markup=InlineKeyboardMarkup(buttons))
 
     elif data == 'setffmpeg':
         try:
