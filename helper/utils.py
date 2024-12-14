@@ -137,6 +137,20 @@ async def CANT_CONFIG_GROUP_MSG(client, message):
     await ms.delete()
 
 
+async def get_video_duration(filepath):
+    """Extract video duration using ffmpeg."""
+    cmd = f"ffprobe -i \"{filepath}\" -show_entries format=duration -v quiet -of csv=\"p=0\""
+    process = await asyncio.create_subprocess_shell(
+        cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
+    )
+    stdout, _ = await process.communicate()
+    try:
+        duration = float(stdout.decode().strip())
+        return convert(duration)
+    except:
+        return "Unknown"
+
+
 async def Compress_Stats(e, userid):
 
 
